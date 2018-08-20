@@ -44,7 +44,7 @@ for i = 1 : length(cfg.data.patients)
             
             % Save preprocessed data in a different file
             fprintf('... saving the preprocessed data. \n')
-            save(data_file, '-struct', s);
+            save(data_file, '-struct', 's');
             clear s;
         else
             fprintf(['... preprocess file exists and not reprocessed: ' data_file '\n'])

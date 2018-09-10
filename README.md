@@ -7,6 +7,7 @@ Download the following software packages, required to track dynamic communities 
 - Download the [The Brain Connectivity Toolbox](https://sites.google.com/site/bctnet/)
 - Download this "generalized Louvain" MATLAB code for community detection [GenLouvain2.1](http://netwiki.amath.unc.edu/GenLouvain/GenLouvain)
 - Download the [dynamic plex percolation method](https://github.com/nathanntg/dynamic-plex-propagation)
+- Download the [export_fig, a MATLAB toolbox for exporting publication quality figures](https://github.com/altmany/export_fig)
 
 ## Initial MATLAB setup
 Rename the file `dynanets_defaults_local_example.m` --> `dynanets_defaults_local.m`
@@ -15,22 +16,23 @@ Rename the file `dynanets_defaults_local_example.m` --> `dynanets_defaults_local
 - Line 8, replace  `'/Users/me/analysis/toolboxes/dpp/'` with a string to the directory where DPPM was installed.
 - Line 9, replace `'/Users/me/analysis/toolboxes/BCT'` with a string to the directory where the Brain Connectivity Toolbox was installed.
 - Line 10, replace `'/Users/me/analysis/toolboxes/GenLouvain-2.1'` with a string to the directory where the generalized Louvain code was installed.
-- Line 11, replace `'/Volumes/Data/Output_Data/'` with a string to an output write directory for data.
-- Line 12, replace `'/Volumes/Data/Output_Data/'` with a string to an output write directory for figures.
+- Line 11, replace `'/Users/me/analysis/toolboxes/export_fig'` with a string to the directory where export-fig was installed.
+- Line 12, replace `'/Volumes/Data/Output_Data/'` with a string to an output write directory for data.
+- Line 13, replace `'/Volumes/Data/Output_Data/'` with a string to an output write directory for figures.
 
 You can enter information for a second system in Lines 13-18, if useful.
 
 ## Code organization
-The central file of the pipeline is main_dynanets.m, as it is calling all the other routines.
-The code is then organized into subfolders according to the tasks being done: 
-- 1-build: start a simulation or load existing data
-- 2-preprocess: runs some simple preprocessings like filtering
-- 3-infer: runs the network inference procedure (currently based on maximum cross-correlation)
-- 4-track: runs the different community tracking algorithms implemented (DPPM, CPM, MMM)
-- 5-analyze: runs some basic analyzes and output some plots.
-- simulation: contains the code to be able to re-run the simulations analyzed in the paper.
+The central file of the pipeline is `main_dynanets.m`, which calls all other routines.
+The code is organized into subfolders according to the tasks being done: 
+- `1-build`: start a simulation or load existing data
+- `2-preprocess`: apply simple preprocessing, like filtering
+- `3-infer`: runs the network inference procedure (currently based on [maximum cross-correlation](http://math.bu.edu/people/mak/papers/Kramer_et_al_PRE_2009.pdf))
+- `4-track`: runs the different community tracking algorithms implemented (DPPM, CPM, MMM)
+- `5-analyze`: runs basic analysis of the results, and outputs visualizations.
+- `simulation`: contains the code to run the simulations analyzed in the paper.
 
-The way this pipeline is configured is based on the use of a structure called cfg where all the settings are stored (inspired by the approach implemented in Fieldtrip toolbox). Here are the options of the configuration:
+This pipeline configurations is based on the use of a structure called `cfg` where all the settings are stored (inspired by the approach implemented in [Fieldtrip toolbox](http://www.fieldtriptoolbox.org/)). Here are the options of the configuration:
 
     % Build simulation data
     cfg.data.run = true;
@@ -73,10 +75,21 @@ The way this pipeline is configured is based on the use of a structure called cf
     cfg.fig.usetitle = true; % choose to use titles in plots
     cfg.fig.fontsize = 12; % font size used in plots
     
-In the case of setting up simulations, you can find an example of full cfg description in the simulation folder, 'dynanets_sim_all.m'. 
+To run and analyze multiple scenarios, each multiple times, see the example cfg description in the simulation folder, `dynanets_sim_all.m`.
+
+To run and analyze a single simulation scenario a single time, see the example cfg description in the simulation folder,
+`dynanets_sim_individual.m`
 
 ## Simulations
-The simulation folder contains the code to run the simulations from the paper. More specifically:
-- simulation\7-node-example contains the code to generate Fig 1C
-- simulation\9-node-example contains the code to generate Fig 1D
-- all the other files are used to generate the data used in Fig2-4. dynanets_sim_all.m is the core file that setups the parameters of the simulations and run the pipeline.
+The `simulation` folder contains the code to run the simulations from the paper. More specifically:
+- `simulation\7-node-example` contains the code to generate Fig 1C
+- `simulation\9-node-example` contains the code to generate Fig 1D
+- all the other files are used to generate the data used in Fig 2-4. `dynanets_sim_all.m` is the core file that setups the parameters of the simulations and run the pipeline.
+
+## Example simulation and network tracking analysis
+To run an example simulation and analysis, first define `dynanets_defaults_local.m` as described above. Then, from the root `dppm` folder, run the following commands at the MATLAB prompt:
+
+```
+>> dynanets_defaults_local
+>> run simulation/dynanets_sim_individual
+```

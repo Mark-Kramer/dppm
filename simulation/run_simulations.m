@@ -3,8 +3,8 @@ function run_simulations(scenario_name, sim_name)
 % Null:         no connectivity.
 % Expand:       growing coupled region.
 % Contract:     shrinking coupled region.
-% Split
-% Merge
+% Split:        a coupled region splits in two.
+% Merge:        two coupled regions merge into one.
 
 global dynanets_default;
 outpath = dynanets_default.outdatapath;

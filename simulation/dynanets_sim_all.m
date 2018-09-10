@@ -2,6 +2,7 @@ simscenarios = {'Expand'; 'Contract'; 'Split'; 'Merge'};     %Choice: 'Null', 'E
 nbsim        = 100;
 
 for i_scenario = 1:length(simscenarios)
+%i_scenario=5;
     cfg = [];
 
     % Build simulation data

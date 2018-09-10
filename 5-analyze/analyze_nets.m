@@ -13,16 +13,16 @@ for m = 1 : length(method_list)
     cfg.track.method = method_list{m};
     switch cfg.track.method.name
         case 'dpp'
-            save_name = [num2str(cfg.track.method.m) '_' num2str(cfg.track.method.k)];
+            save_name = [num2str(track.m) '_' num2str(track.k)];
         case 'mmm'
-            save_name = [num2str(cfg.track.method.gamma) '_' num2str(cfg.track.method.omega)];
+            save_name = [num2str(track.gamma) '_' num2str(track.omega)];
         case 'cpm'
-            save_name = num2str(cfg.track.method.min_clique);
+            save_name = num2str(track.min_clique);
     end
     
     for i = 1 : length(cfg.data.patients)
         pat = cfg.data.patients{i};
-        %population_results = [];
+        population_results = [];
         
         if cfg.fig.analyze_seizures
             % analyze each seizure
@@ -42,7 +42,6 @@ for m = 1 : length(method_list)
                     % Find participation that lasts at least 2 step, and has at least cfg.fig.mmmthresh nodes.
                     track = filter_small_communities(track, 2, cfg.fig.mmmthresh);
                 end
-                
                 population_results(j) = analyze_dpp(cfg, fig_path, pat, sz, nets, track); %#ok<AGROW>
             end
         end

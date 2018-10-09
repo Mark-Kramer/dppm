@@ -8,6 +8,7 @@ Download the following software packages, required to track dynamic communities 
 - Download this "generalized Louvain" MATLAB code for community detection [GenLouvain2.1](http://netwiki.amath.unc.edu/GenLouvain/GenLouvain)
 - Download the [dynamic plex percolation method](https://github.com/nathanntg/dynamic-plex-propagation)
 - Download the [export_fig, a MATLAB toolbox for exporting publication quality figures](https://github.com/altmany/export_fig)
+- Download the [chronux toolbox](http://chronux.org/)
 
 ## Initial MATLAB setup
 Rename the file `dynanets_defaults_local_example.m` --> `dynanets_defaults_local.m`

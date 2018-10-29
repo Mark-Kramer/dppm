@@ -6,7 +6,6 @@ simscenarios = {'Expand'; 'Contract'; 'Split'; 'Merge'};
 
 cfg = [];
 cfg.data.patients = {'Simulation'};
-cfg.data.padding = [0 0];
 cfg.preprocess.ref = '';
 cfg.preprocess.filt = 'firls';
 cfg.preprocess.band = [4 50]; 

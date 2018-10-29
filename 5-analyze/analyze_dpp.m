@@ -1,13 +1,19 @@
 function stats = analyze_dpp(cfg, fig_path, pat, sz, nets, track)
 
-t_sz_end = nets.t_sz_end;
-xlim_new = [0-cfg.fig.plotpadding(1) t_sz_end+cfg.fig.plotpadding(2)];
+xlim_new = [nets.t(1) nets.t(end)];
+if isfield(cfg.fig, 'plotpadding')
+    xlim_new = [xlim_new(1)+cfg.fig.plotpadding(1) xlim_new(end)-cfg.fig.plotpadding(2)];
+end
+ioi = xlim_new;
+if isfield(cfg.fig, 'interval_of_interest') % applied after padding
+    ioi = [ioi(1) + cfg.fig.interval_of_interest(1) ioi(2) - cfg.fig.interval_of_interest(2)];
+end
 
 cc_nowhite = colorcube;
 cc_nowhite = cc_nowhite(1:end-1,:);
 
-% Only consider times up to the maximum plot padding.
-restricted_time_interval = find(nets.t < t_sz_end + cfg.fig.plotpadding(2));
+% Only consider times within the plot padding.
+restricted_time_interval = find(nets.t >= xlim_new(1) & nets.t <= xlim_new(2));
 time = nets.t(restricted_time_interval);
 
 % Compute a bunch of summary statistics about the communities
@@ -31,8 +37,9 @@ end
 %--------------------------------------------------------------------------
 % Density plot
 f = figure;
-plot_density(nets, xlim_new);
-plot_startend_lines(0, t_sz_end);   
+plot_density(nets);
+plot_startend_lines(ioi(1), ioi(2));
+xlim(xlim_new);
 setup_fig(cfg, [pat ' ' sz ' ' nets_filename(cfg)]);
 print(f, cfg.fig.type, [fig_path '/density_' nets_filename(cfg)])
 close(f);
@@ -45,8 +52,7 @@ ylim([0, max(stats.nb_com)+1]);
 xlabel('Time (s)')
 ylabel('Number of Communities')
 title([pat ' ' sz ' ' track_filename(cfg)], 'Interpreter', 'None')
-plot_startend_lines(0, t_sz_end);
-xlim(xlim_new);
+plot_startend_lines(ioi(1), ioi(2));
 print(f, cfg.fig.type, [fig_path '/community_nb_' track_filename(cfg)])
 close(f);
 
@@ -59,8 +65,7 @@ imagescwithpcolor(time, (1:size(community,2)), community')
 xlabel('Time (s)')
 ylabel('Community #')
 title([pat ' ' sz ' ' track_filename(cfg)], 'Interpreter', 'None')
-plot_startend_lines(0, t_sz_end);
-xlim(xlim_new);
+plot_startend_lines(ioi(1), ioi(2));
 print(f, cfg.fig.type, [fig_path '/community_census_' track_filename(cfg)])
 close(f);
 
@@ -87,8 +92,7 @@ xlabel('Time (s)')
 ylabel('Size of the biggest community')
 title([pat ' ' sz ' ' track_filename(cfg)], 'Interpreter', 'None')
 axis tight
-plot_startend_lines(0, t_sz_end);
-xlim(xlim_new);
+plot_startend_lines(ioi(1), ioi(2));
 print(f, cfg.fig.type, [fig_path '/community_size_' track_filename(cfg)])
 close(f);
 
@@ -101,8 +105,7 @@ imagescwithpcolor(time, (1:n_nodes), participation(:,node_sort)')
 xlabel('Time (s)')
 ylabel('Node')
 title([pat ' ' sz ' ' track_filename(cfg)], 'Interpreter', 'None')
-plot_startend_lines(0, t_sz_end);
-xlim(xlim_new);
+plot_startend_lines(ioi(1), ioi(2));
 export_fig(f, [fig_path '/community_participation_' track_filename(cfg) '.' cfg.fig.type(3:end)]);
 close(f);
 

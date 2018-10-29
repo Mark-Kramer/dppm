@@ -1,4 +1,4 @@
-function plot_density(nets, xl)
+function plot_density(nets)
 % Plot the density.
 
 T = size(nets.C,3);             % Total # time points.
@@ -11,11 +11,7 @@ end
 
 plot(nets.t, den);
 axis tight
-if nargin == 2
-    xlim(xl);
-end
 xlabel('Time (s)')
 ylabel('Density')
-
 
 end

@@ -15,7 +15,7 @@ for i_scenario = 1:length(simscenarios)
         seizure{k,1} = strcat(cfg.data.simscenario, '_', num2str(k));
     end
     cfg.data.seizures = {seizure};
-    cfg.data.padding = [0 0];
+    cfg.data.custom_str = 'pad[0,0]';
 
 
     % Preprocessing settings

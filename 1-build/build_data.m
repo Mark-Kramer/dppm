@@ -19,7 +19,7 @@ for i = 1 : length(cfg.data.patients)
             if strcmp(pat, 'Simulation')
                 run_simulations(cfg.data.simscenario, sz);
             elseif isfield(cfg.data, 'build_fun') && ~isempty(cfg.data.build_fun)
-                cfg.data.build_fun(data_file, pat, sz, cfg.data.padding);
+                cfg.data.build_fun(data_file, pat, sz);
             end
         else
             fprintf(['... build file exists and not rebuilt: ' data_file '\n'])

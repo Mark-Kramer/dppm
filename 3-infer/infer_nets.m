@@ -23,7 +23,6 @@ for i = 1 : length(cfg.data.patients)
                 % Assume variables:  d = data, t = time axis
                 d = s.ECoG.Data;
                 t = s.ECoG.Time;
-                nets.t_sz_end = t(end) - cfg.data.padding(2);
                           
                 % Determine if using global correlation variance scale, and if so, compute it.
                 if cfg.infer.scale

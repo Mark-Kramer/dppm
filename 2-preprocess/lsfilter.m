@@ -5,7 +5,7 @@ function  y = lsfilter(data,fs,BAND)
 % band of frequencies to be included in the data, all other frequencies
 % will be excluded.  Fs is the sampling frequency. Y is filtered data.
 
-ORDER = 3000; % needs 3*order samples
+ORDER = 300; % needs 3*order samples
 order = min(ORDER, floor(size(data,1)/3));
 if order ~= ORDER
     warning(['lsfilter: using filter order ' num2str(order) ' instead of ' num2str(ORDER)]);

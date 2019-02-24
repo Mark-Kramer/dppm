@@ -15,6 +15,10 @@ for i = 1 : length(cfg.data.patients)
             fprintf('... reading in the build file. \n')
             s = load([dynanets_default.outdatapath '/' pat '_' sz '/' data_filename(cfg) '.mat']);
             
+            if isfield(cfg.preprocess, 'custom_fun')
+                [cfg, s] = cfg.preprocess.custom_fun(cfg, pat, sz, s);
+            end
+            
             % Reference data
             if strcmp(cfg.preprocess.ref, 'cavg') == 1
                 fprintf('... common average reference the data. \n')
@@ -37,11 +41,17 @@ for i = 1 : length(cfg.data.patients)
                 fprintf('... filtering the data. \n')
                 fs = s.ECoG.SamplingRate; 
                 filtered_data = lsfilter(s.ECoG.Data, fs, cfg.preprocess.band);
-                diagnostics_filter(s.ECoG.Time, s.ECoG.Data, filtered_data, fs, cfg.preprocess.band, [dynanets_default.outfigpath '/' pat '_' sz '/fig/filter_diagnositics']);
+                %diagnostics_filter(s.ECoG.Time, s.ECoG.Data, filtered_data, fs, cfg.preprocess.band, [dynanets_default.outfigpath '/' pat '_' sz '/fig/filter_diagnositics']);
                 s.ECoG.Data   = filtered_data;
                 clear filtered_data;
             end
             
+            % Save a simple representation of the whole data for diagnostics
+            f = figure('Visible', 'off');
+            plotchannels(s.ECoG.Time, s.ECoG.Data);
+            print(f, '-dpng', '-r200',  [data_file '.png']);
+            close(f)
+
             % Save preprocessed data in a different file
             fprintf('... saving the preprocessed data. \n')
             save(data_file, '-struct', 's');

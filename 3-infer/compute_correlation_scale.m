@@ -24,7 +24,11 @@ function [scale] = compute_correlation_scale(d,t,cfg)
       
   end
   
-  scale = mean(stdsij(:));
+  if cfg.infer.scale == "global"
+    scale = nanmean(stdsij(:));
+  elseif cfg.infer.scale == "win"
+    scale = nanmean(stdsij,2);
+  end
 
 end
 

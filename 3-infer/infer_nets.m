@@ -25,9 +25,11 @@ for i = 1 : length(cfg.data.patients)
                 t = s.ECoG.Time;
                           
                 % Determine if using global correlation variance scale, and if so, compute it.
-                if cfg.infer.scale
-                    fprintf(['... computing empirical scale of correlation from all data. \n'])
-                    [scale] = compute_correlation_scale(d,t,cfg);
+                if ismember(cfg.infer.scale, {'global', 'win'})
+                    fprintf('... computing empirical scale of correlation from all data. \n')
+                    scale = compute_correlation_scale(d,t,cfg);
+                else
+                    scale = 1;
                 end
                 
                 % Divide the data into windows, with overlap.
@@ -49,8 +51,10 @@ for i = 1 : length(cfg.data.patients)
                     indices = t >= t_start & t < t_stop;                       %... find indices for window in t,
                                         
                     % Build the functional networks.
-                    if cfg.infer.scale
+                    if cfg.infer.scale == "global"
                         [C,mx,lag,rho] = infer_network_correlation_analytic(d(indices,:), 'scale', scale); %#ok<PFBNS>
+                    elseif cfg.infer.scale == "win"
+                        [C,mx,lag,rho] = infer_network_correlation_analytic(d(indices,:), 'scale', scale(k)); %#ok<PFBNS>
                     else
                         [C,mx,lag,rho] = infer_network_correlation_analytic(d(indices,:)); %#ok<PFBNS>
                     end

@@ -13,8 +13,12 @@ for i = 1 : length(cfg.data.patients)
         data_file = [dynanets_default.outdatapath '/' pat '_' sz '/' data_filename(cfg) '.mat'];
         if cfg.data.run || ~exist(data_file, 'file')
             fprintf('... building. \n')
-            mkdir([dynanets_default.outdatapath '/' pat '_' sz '/']);
-            mkdir([dynanets_default.outfigpath '/' pat '_' sz '/fig/']);
+            if ~exist([dynanets_default.outdatapath '/' pat '_' sz '/'], 'dir')
+                mkdir([dynanets_default.outdatapath '/' pat '_' sz '/']);
+            end
+            if ~exist([dynanets_default.outfigpath '/' pat '_' sz '/fig/'], 'dir')
+                mkdir([dynanets_default.outfigpath '/' pat '_' sz '/fig/']);
+            end
             
             if strcmp(pat, 'Simulation')
                 run_simulations(cfg.data.simscenario, sz);

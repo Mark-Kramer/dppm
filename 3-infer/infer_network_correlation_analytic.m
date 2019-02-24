@@ -81,13 +81,12 @@ function [C,mx,lag,rho] = infer_network_correlation_analytic(dgrid, varargin)
   sij = 0.5*log((1+cc)./(1-cc));                        %Fisher transform the cc.
   stdsij = squeeze(std(  sij(:,[(1:maxLags+1), ...      %Compute std over Fisher cc's.
                                 (end-maxLags+1:end)],:), [], 2));
-  scale0 = nanmean(stdsij(up));                         %Compute avg std of Fisher cc's
+  
+  if nargin==3 && strcmp(varargin{1}, 'scale')          %Check if using global (all time) scale.
+  	  scale0 = varargin{2};
+  else
+      scale0 = nanmean(stdsij(up));                     %Compute avg std of Fisher cc's
                                                         %...need nanmean in case cc={-1,1}.
- 
-  if nargin==3                                          %Check if using global (all time) scale.
-      if strcmp(varargin{1}, 'scale')
-          scale0 = varargin{2};
-      end
   end                                         
                                                         
   cc0 = cc(:,[(end-maxLags+1:end), (1:maxLags+1)],:);   %Get the correlations in +/- maxLags range,

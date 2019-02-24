@@ -18,8 +18,14 @@ for m = 1 : length(method_list)
                      
             data_file = [dynanets_default.outdatapath '/'  pat '_' sz '/' track_filename(cfg) '.mat'];
             if cfg.track.run || ~exist(data_file, 'file')
-                fprintf(['4-track using ' track.name ': ' pat '_' sz ': ' nets_filename(cfg)])
+                fprintf(['4-track : ' pat '_' sz ' ' nets_filename(cfg) ' using ' track.name])
                 load([dynanets_default.outdatapath '/' pat '_' sz '/' nets_filename(cfg) '.mat'], 'nets');    % Load networks.
+                
+                NN = isnan(nets.C(:));
+                if any(NN)
+                    verboseprintf('[ Warning: NaNs detected in the network matrix, replacing with 0 ]')
+                    nets.C(isnan(nets.C)) = 0;
+                end
                 
                 switch track.name
                     case 'dpp'

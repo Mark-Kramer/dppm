@@ -18,7 +18,7 @@ time = nets.t(restricted_time_interval);
 
 % Compute a bunch of summary statistics about the communities
 stats = community_stats(track, restricted_time_interval);
-if ~isempty(cfg.fig.custom_stats)
+if isfield(cfg.fig, 'custom_stats') && ~isempty(cfg.fig.custom_stats)
     stats = cfg.fig.custom_stats(cfg, pat, sz, nets, track, stats);
 end
 
@@ -27,7 +27,7 @@ n_nodes = size(nets.C,1);
 
 % Load node sorting if specified (used to plot participation in a
 % particular order for example)
-if ~isempty(cfg.fig.custom_node_sort)
+if isfield(cfg.fig, 'custom_node_sort') && ~isempty(cfg.fig.custom_node_sort)
     node_sort = cfg.fig.custom_node_sort(cfg, pat, sz);
 else
     node_sort = 1:n_nodes;

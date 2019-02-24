@@ -49,11 +49,14 @@ for m = 1 : length(method_list)
         
         % Save the per-patient results and run the overall analyze by patient
         if ~isempty(cfg.fig.analyze_population_fun)
-            scenario = cfg.data.simscenario;
-            data_file = [dynanets_default.outdatapath '/' pat '_' scenario '_population_results/' cfg.track.method.name '_' save_name '_' nets_filename(cfg) '.mat'];
+            str_tmp = '';
+            if isfield(cfg.data, 'simscenario')
+                str_tmp = ['_' cfg.data.simscenario];
+            end
+            data_file = [dynanets_default.outdatapath '/' pat str_tmp '_population_results/' cfg.track.method.name '_' save_name '_' nets_filename(cfg) '.mat'];
             if ~exist(data_file, 'file')
-                mkdir([dynanets_default.outdatapath '/' pat '_' scenario '_population_results/']);
-                mkdir([dynanets_default.outfigpath  '/' pat '_' scenario '_population_results/fig/']);
+                mkdir([dynanets_default.outdatapath '/' pat str_tmp '_population_results/']);
+                mkdir([dynanets_default.outfigpath  '/' pat str_tmp '_population_results/fig/']);
             end
             if isempty(population_results)
                 load(data_file, 'population_results');
@@ -61,7 +64,7 @@ for m = 1 : length(method_list)
                 save(data_file, 'population_results');
             end
             
-            fig_path = [dynanets_default.outfigpath '/' pat '_' scenario '_population_results/fig'];
+            fig_path = [dynanets_default.outfigpath '/' pat str_tmp '_population_results/fig'];
             fig_file = [fig_path '/' cfg.track.method.name '_' save_name '_' nets_filename(cfg)];
             cfg = cfg.fig.analyze_population_fun(cfg, fig_file, population_results);
         end

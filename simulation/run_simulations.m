@@ -38,7 +38,6 @@ end
 
 taxis = (1:size(data,1))/Fs;
 
-% Format the save to match the "ECoG" mgh toolbox format.
 ECoG.Position = [xyz(:,1), xyz(:,2), xyz(:,3)];
 ECoG.Name = ['Simulation_' scenario_name];
 ECoG.SamplingRate = Fs;
